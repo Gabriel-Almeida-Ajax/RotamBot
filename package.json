@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "server": "npm i && pm2 start ./src/client/ready.js",
-    "dev": "nodemon ./src/client/ready.js"
+    "start": "nodemon ./src/client/ready.js"
   },
   "dependencies": {
     "@discordjs/rest": "^0.5.0",
