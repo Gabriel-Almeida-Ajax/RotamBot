@@ -1,6 +1,3 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
-
 const differenceToTime = (difference) => {
   const hours = Math.floor(difference / 3600000);
   const minutes = Math.floor((difference - hours * 3600000) / 60000);
@@ -44,36 +41,13 @@ class PontoIndividual {
     return getDifference(this.timeEnd, this.timeStart);
   }
 
-  async getOut() {
+  getOut() {
     if (this.timeEnd) return;
-    const message = this.getMessage();
     this.timeEnd = new Date();
-    await prisma.r030pon.update({
-      where: {
-        MESSID: message.id
-      },
-      data: {
-        DATSAI: this.timeEnd,
-        TRATOT: getDifference(this.timeEnd, this.timeStart, "-n")
-      }
-    });
   }
 
-  async setMessage(message) {
+  setMessage(message) {
     this.message = message;
-    await prisma.r030pon.create({
-      data: {
-        CADFUN: message.author.id,
-        DATENT: this.timeStart,
-        DATSAI: null,
-        TRATOT: null,
-        MESSID: message.id,
-        CHATID: message.channelId
-      },
-      select: {
-        MESSID: true
-      }
-    });
   }
 
   getMessage() {
