@@ -24,16 +24,22 @@ class PontoIndividual {
   }
 
   getDate() {
-    return this.timeStart.toLocaleDateString('pt-BR');
+    return this.timeStart.toLocaleDateString("pt-BR", {
+      timeZone: "America/Sao_Paulo"
+    });
   }
 
   getTimeStart() {
-    return this.timeStart.toLocaleTimeString('pt-BR');
+    return this.timeStart.toLocaleTimeString("pt-BR", {
+      timeZone: "America/Sao_Paulo"
+    });
   }
 
   getTimeEnd() {
     if (!this.timeEnd) return "Em Serviço...";
-    return this.timeEnd.toLocaleTimeString('pt-BR');
+    return this.timeEnd.toLocaleTimeString("pt-BR", {
+      timeZone: "America/Sao_Paulo"
+    });
   }
 
   getTotalHours() {
