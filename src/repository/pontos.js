@@ -24,16 +24,16 @@ class PontoIndividual {
   }
 
   getDate() {
-    return this.timeStart.toLocaleDateString();
+    return this.timeStart.toLocaleDateString('pt-BR');
   }
 
   getTimeStart() {
-    return this.timeStart.toLocaleTimeString();
+    return this.timeStart.toLocaleTimeString('pt-BR');
   }
 
   getTimeEnd() {
     if (!this.timeEnd) return "Em Serviço...";
-    return this.timeEnd.toLocaleTimeString();
+    return this.timeEnd.toLocaleTimeString('pt-BR');
   }
 
   getTotalHours() {
