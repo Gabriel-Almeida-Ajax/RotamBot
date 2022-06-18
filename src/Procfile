@@ -1,1 +1,1 @@
-worker: node ./src/client/ready.js 
+worker: node ./src/client/ready.js -p $PORT
