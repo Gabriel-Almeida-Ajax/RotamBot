@@ -17,4 +17,8 @@ listeningIn.forEach((listener) => {
   client.on(listener.event, listener.handler);
 });
 
+require("express")().get("/", (req, res) => {
+  res.send(`Logged in as ${client.user.tag}!`);
+}).listen(process.env.PORT || 3000);
+
 module.exports = client;
