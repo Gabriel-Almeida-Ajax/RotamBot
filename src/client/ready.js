@@ -3,7 +3,7 @@ const { Client, Intents } = require("discord.js");
 const pontos = require("../repository/pontos");
 const client = new Client({
   disableEveryone: true,
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
 });
 
 client.login(process.env.DISCORD_TOKEN ?? "");
