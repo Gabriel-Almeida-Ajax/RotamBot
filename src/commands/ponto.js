@@ -16,11 +16,10 @@ module.exports = async (client, msg, args) => {
           url: "https://exercitobrasileiromt.wixsite.com/exercitobrasileiro"
         })
         .setThumbnail(msg.author.avatarURL());
-
     const has = PontosRepository.pontos.has(msg.author.id);
     if (has) {
-      PontosRepository.close(msg.author.id);
-      const ponto = PontosRepository.get(msg.author.id);
+      const ponto = PontosRepository.get(msg.author.id, 'module');
+      ponto.getOut();
 
       const end = ping().addFields(
         { name: "Militar:", value: `<@${msg.author.id}>`, inline: true },
@@ -29,7 +28,9 @@ module.exports = async (client, msg, args) => {
         { name: "Horário de Saída:", value: ponto.getTimeEnd(), inline: true },
         { name: "Total de Horas:", value: ponto.getTotalHours(), inline: true }
       );
-      ponto.getMessage().edit({ embeds: [end] });
+
+      ponto.message.edit({ embeds: [end] });
+      
       return PontosRepository.pontos.delete(msg.author.id);
     }
 
@@ -42,7 +43,10 @@ module.exports = async (client, msg, args) => {
       { name: "Total de Horas:", value: ponto.getTotalHours(), inline: true }
     );
 
-    ponto.setMessage(await msg.channel.send({ embeds: [start] }));
+    ponto.setMessage(
+      await msg.channel.send({ embeds: [start] }),
+      msg.author.id
+    );
   } catch (error) {
     console.log(error);
   }
