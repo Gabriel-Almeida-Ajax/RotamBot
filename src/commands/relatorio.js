@@ -1,62 +1,56 @@
-const PontosRepository = require("../repository/pontos");
+const { PrismaClient, Prisma } = require("@prisma/client");
+const {
+  differenceToTime,
+  getYesterday,
+  getTomorrow
+} = require("../utils/datetime");
 
-const { MessageEmbed } = require("discord.js");
+const prisma = new PrismaClient();
+const header = require("../client/components/header");
 
-module.exports = async (client, msg, args) => {
+module.exports = async (
+  client,
+  msg,
+  [START = getYesterday(), END = getTomorrow()]
+) => {
   try {
     msg.delete();
-    const logo =
-      "https://seeklogo.com/images/R/ROTAM_-_PMGO-logo-E1242CE8B6-seeklogo.com.png";
-    const ping = () =>
-      new MessageEmbed()
-        .setColor("#f7b931")
-        .setAuthor({
-          name: "ROTAM - Sistema de Ponto",
-          iconURL: logo,
-          url: "https://discord.js.org"
-        })
-        .setThumbnail(logo);
+    const sql = await prisma.$queryRaw(Prisma.sql`
+        SELECT "CADFUN", SUM("TRATOT") "TRATOT" FROM r030pon
+          WHERE "DATENT" BETWEEN ${new Date(START)} AND ${new Date(END)}
+          AND "DATSAI" IS NOT NULL
+        GROUP BY "CADFUN"
+      `);
 
-    const ponto = PontosRepository.open(msg.author);
-    const start = ping()
-      .addFields(
-        { name: "Nome:", value: `<@${msg.author.id}>` },
-        { name: "Data do Fechamento:", value: ponto.getDate(), inline: true },
+    const start = header(msg, true);
+
+    sql.forEach(async (ponto) => {
+      start.addFields(
+        { name: "Nome:", value: `<@${ponto.CADFUN}>` },
         {
-          name: "Total de Horas:",
-          value: ponto.getTotalHours() + " 👌",
+          name: "Data do Fechamento:",
+          value: new Date().toLocaleDateString("pt-BR", {
+            timeZone: "America/Sao_Paulo"
+          }),
           inline: true
-        }
-      )
-      .addFields(
-        { name: "Nome:", value: `<@${msg.author.id}>` },
-        { name: "Data do Fechamento:", value: ponto.getDate(), inline: true },
+        },
         {
           name: "Total de Horas:",
-          value: ponto.getTotalHours() + " 😢",
-          inline: true
-        }
-      )
-      .addFields(
-        { name: "Nome:", value: `<@${msg.author.id}>` },
-        { name: "Data do Fechamento:", value: ponto.getDate(), inline: true },
-        {
-          name: "Total de Horas:",
-          value: ponto.getTotalHours() + " 👌",
-          inline: true
-        }
-      )
-      .addFields(
-        { name: "Nome:", value: `<@${msg.author.id}>` },
-        { name: "Data do Fechamento:", value: ponto.getDate(), inline: true },
-        {
-          name: "Total de Horas:",
-          value: ponto.getTotalHours() + " 👌",
+          value: differenceToTime(ponto.TRATOT),
           inline: true
         }
       );
+    });
 
-    ponto.setMessage(await msg.channel.send({ embeds: [start] }));
+    const _msg = await msg.channel.send({
+      content: `${START.toLocaleDateString("pt-BR", {
+        timeZone: "America/Sao_Paulo"
+      })} - ${END.toLocaleDateString("pt-BR", {
+        timeZone: "America/Sao_Paulo"
+      })}`,
+      embeds: [start]
+    });
+    _msg.react("✅");
   } catch (error) {
     console.log(error);
   }

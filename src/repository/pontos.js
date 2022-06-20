@@ -19,10 +19,10 @@ const getDifference = (time1, time2, arg) => {
 };
 
 class PontoIndividual {
-  constructor({ author, timeStart, message = null }) {
+  constructor({ author, timeStart, message = null, timeEnd = null }) {
     this.author = author;
     this.timeStart = new Date(timeStart ? timeStart : new Date());
-    this.timeEnd = null;
+    this.timeEnd = timeEnd;
     this.message = message;
   }
 
@@ -65,7 +65,7 @@ class PontoIndividual {
       }
     });
 
-    if(diference > sixHours) {
+    if (diference > sixHours) {
       return this.message.react("🚨");
     }
 
@@ -100,6 +100,8 @@ class Pontos {
   }
 
   async start(client) {
+    this.client = client;
+
     const pontosAbertos = await prisma.r030pon.findMany({
       where: {
         DATSAI: null
@@ -115,15 +117,14 @@ class Pontos {
     pontosAbertos.forEach(async (ponto) => {
       const channel = await client.channels.fetch(ponto.CHATID);
       const message = await channel.messages.fetch(ponto.MESSID);
-      
+
       const pontoIndividual = new PontoIndividual({
         author: message.author,
         timeStart: ponto.DATENT,
         message: message
       });
       this.pontos.set(ponto.CADFUN, pontoIndividual);
-    })
-
+    });
   }
 
   open(author) {
