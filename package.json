@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "server": "npm i && pm2 start ./src/client/ready.js",
+    "server": "npm i && npx prisma db pull && npx prisma generate && pm2 start ./src/client/ready.js --name eb-bot",
     "start": "node ./src/client/ready.js",
     "dev": "nodemon ./src/client/ready.js"
   },
