@@ -24,9 +24,8 @@ module.exports = async (
         GROUP BY "CADFUN"
       `);
 
-    const start = header(msg, true);
-
     sql.forEach(async (ponto) => {
+      const start = header(msg, true);
       start.addFields(
         { name: "Nome:", value: `<@${ponto.CADFUN}>` },
         {
@@ -42,17 +41,16 @@ module.exports = async (
           inline: true
         }
       );
+      const _msg = await msg.channel.send({
+        content: `${START.toLocaleDateString("pt-BR", {
+          timeZone: "America/Sao_Paulo"
+        })} - ${END.toLocaleDateString("pt-BR", {
+          timeZone: "America/Sao_Paulo"
+        })}`,
+        embeds: [start]
+      });
+      _msg.react("✅");
     });
-
-    const _msg = await msg.channel.send({
-      content: `${START.toLocaleDateString("pt-BR", {
-        timeZone: "America/Sao_Paulo"
-      })} - ${END.toLocaleDateString("pt-BR", {
-        timeZone: "America/Sao_Paulo"
-      })}`,
-      embeds: [start]
-    });
-    _msg.react("✅");
   } catch (error) {
     console.log(error);
   }
