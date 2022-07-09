@@ -8,7 +8,7 @@ const differenceToTime = (difference) => {
 };
 const getYesterday = () => {
   const today = new Date();
-  const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+  const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000 * 7);
   return yesterday;
 };
 const getTomorrow = () => {

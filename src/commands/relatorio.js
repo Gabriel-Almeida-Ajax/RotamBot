@@ -14,6 +14,8 @@ module.exports = async (
   [START = getYesterday(), END = getTomorrow()]
 ) => {
   try {
+    START = new Date(START);
+    END = new Date(END);
     msg.delete();
     const sql = await prisma.$queryRaw(Prisma.sql`
         SELECT "CADFUN", SUM("TRATOT") "TRATOT" FROM r030pon

@@ -22,7 +22,7 @@ class PontoIndividual {
   constructor({ author, timeStart, message = null, timeEnd = null }) {
     this.author = author;
     this.timeStart = new Date(timeStart ? timeStart : new Date());
-    this.timeEnd = timeEnd;
+    this.timeEnd = timeEnd ? new Date(timeEnd) : timeEnd;
     this.message = message;
   }
 
@@ -97,6 +97,7 @@ class PontoIndividual {
 class Pontos {
   constructor() {
     this.pontos = new Map();
+    this.PontoIndividual = PontoIndividual;
   }
 
   async start(client) {
