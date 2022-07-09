@@ -53,6 +53,17 @@ module.exports = async (client, msg, [MESSID, CALCULAR]) => {
     message.edit({ embeds: [message.embeds[0], end] });
     message.react("✍️");
   } catch (error) {
-    console.log(error);
+    const ping = header();
+
+    const start = ping.addFields({
+        name: "Nome:",
+        value: `<@${msg.author.id}> Oops! Algo deu errado...`
+      });
+  
+      const _msg = await msg.channel.send({ embeds: [start] });
+      _msg.react("❌");
+  
+      setTimeout(() => _msg.delete(), 15000);
+
   }
 };
