@@ -32,7 +32,8 @@ module.exports = async (client, msg, [MESSID, CALCULAR]) => {
         MESSID: MESSID
       },
       data: {
-        DATSAI: new Date(date.getTime() + CALCULAR * 60 * 1000)
+        DATSAI: new Date(date.getTime() + CALCULAR * 60 * 1000),
+        TRATOT: date.getTime() + CALCULAR * 60 * 1000
       }
     });
 
